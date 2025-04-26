@@ -71,24 +71,57 @@ function AnimeRecommendationApp({ onLogoClick }) {
         }
     };
 
-    // Mock search function - would connect to backend in real app
-    const handleGetRecommendations = () => {
+    // Handle getting recommendations
+    const handleGetRecommendations = async () => {
         setIsLoading(true);
 
-        // Simulate API call with timeout
-        setTimeout(() => {
-            const mockResults = [
-                { id: 1, title: "Attack on Titan", studio: "MAPPA", year: 2013, episodes: 87, rating: 4.8, image: "/api/placeholder/300/450" },
-                { id: 2, title: "Fullmetal Alchemist: Brotherhood", studio: "Bones", year: 2009, episodes: 64, rating: 4.9, image: "/api/placeholder/300/450" },
-                { id: 3, title: "Demon Slayer", studio: "ufotable", year: 2019, episodes: 44, rating: 4.7, image: "/api/placeholder/300/450" },
-                { id: 4, title: "One Piece", studio: "Toei Animation", year: 1999, episodes: 1000, rating: 4.8, image: "/api/placeholder/300/450" },
-                { id: 5, title: "Violet Evergarden", studio: "Kyoto Animation", year: 2018, episodes: 13, rating: 4.6, image: "/api/placeholder/300/450" }
-            ];
+        try {
+            const response = await fetch('http://localhost:5000/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    type: 'anime',
+                    favorites: animeTitles,
+                    preferences: {
+                        genre: userDetails.genre,
+                        mood: userDetails.mood,
+                        era: userDetails.era
+                    }
+                })
+            });
 
-            setRecommendations(mockResults);
-            setIsLoading(false);
+            if (!response.ok) {
+                throw new Error('Failed to get recommendations');
+            }
+
+            const data = await response.json();
+            setRecommendations(data);
             setStep(3);
-        }, 1500);
+        } catch (error) {
+            console.error('Error getting recommendations:', error);
+            // You might want to show an error message to the user here
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Add search functionality
+    const handleSearch = async (query) => {
+        if (!query) return;
+
+        try {
+            const response = await fetch(`http://localhost:5000/search?type=anime&query=${encodeURIComponent(query)}`);
+            if (!response.ok) {
+                throw new Error('Failed to search');
+            }
+            const data = await response.json();
+            // Handle the search results as needed
+            console.log('Search results:', data);
+        } catch (error) {
+            console.error('Error searching:', error);
+        }
     };
 
     // Reset to start over

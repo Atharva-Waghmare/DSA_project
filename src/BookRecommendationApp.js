@@ -71,24 +71,57 @@ function BookRecommendationApp({ onLogoClick }) {
         }
     };
 
-    // Mock search function - would connect to backend in real app
-    const handleGetRecommendations = () => {
+    // Handle getting recommendations
+    const handleGetRecommendations = async () => {
         setIsLoading(true);
 
-        // Simulate API call with timeout
-        setTimeout(() => {
-            const mockResults = [
-                { id: 1, title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960, rating: 4.8, image: "/api/placeholder/300/450" },
-                { id: 2, title: "1984", author: "George Orwell", year: 1949, rating: 4.7, image: "/api/placeholder/300/450" },
-                { id: 3, title: "The Great Gatsby", author: "F. Scott Fitzgerald", year: 1925, rating: 4.5, image: "/api/placeholder/300/450" },
-                { id: 4, title: "The Lord of the Rings", author: "J.R.R. Tolkien", year: 1954, rating: 4.9, image: "/api/placeholder/300/450" },
-                { id: 5, title: "Project Hail Mary", author: "Andy Weir", year: 2021, rating: 4.8, image: "/api/placeholder/300/450" }
-            ];
+        try {
+            const response = await fetch('http://localhost:5000/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    type: 'books',
+                    favorites: bookTitles,
+                    preferences: {
+                        genre: userDetails.genre,
+                        mood: userDetails.mood,
+                        era: userDetails.era
+                    }
+                })
+            });
 
-            setRecommendations(mockResults);
-            setIsLoading(false);
+            if (!response.ok) {
+                throw new Error('Failed to get recommendations');
+            }
+
+            const data = await response.json();
+            setRecommendations(data);
             setStep(3);
-        }, 1500);
+        } catch (error) {
+            console.error('Error getting recommendations:', error);
+            // You might want to show an error message to the user here
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Add search functionality
+    const handleSearch = async (query) => {
+        if (!query) return;
+
+        try {
+            const response = await fetch(`http://localhost:5000/search?type=books&query=${encodeURIComponent(query)}`);
+            if (!response.ok) {
+                throw new Error('Failed to search');
+            }
+            const data = await response.json();
+            // Handle the search results as needed
+            console.log('Search results:', data);
+        } catch (error) {
+            console.error('Error searching:', error);
+        }
     };
 
     // Reset to start over
