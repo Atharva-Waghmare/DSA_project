@@ -371,7 +371,7 @@ function BookRecommendationApp({ onLogoClick }) {
                             <span className="logo-text">Entertainment Hub</span>
                         </div>
                         <div className="copyright">
-                            © 2025 BookBuddy. All rights reserved.
+                            © 2025 Entertainment Hub. All rights reserved.
                         </div>
                     </div>
                 </div>

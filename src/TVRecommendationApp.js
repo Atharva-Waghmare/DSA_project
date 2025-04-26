@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, X, Search, AlertCircle, Tv } from 'lucide-react';
 import Navbar from './Navbar';
-import './AnimeRecommendationApp.css';
+import './TVRecommendationApp.css';
 
-function AnimeRecommendationApp({ onLogoClick }) {
-    const [animeTitles, setAnimeTitles] = useState([]);
-    const [newAnimeTitle, setNewAnimeTitle] = useState('');
+function TVRecommendationApp({ onLogoClick }) {
+    const [tvTitles, setTvTitles] = useState([]);
+    const [newTvTitle, setNewTvTitle] = useState('');
     const [isInputError, setIsInputError] = useState(false);
-    const [maxAnimesReached, setMaxAnimesReached] = useState(false);
+    const [maxTvsReached, setMaxTvsReached] = useState(false);
 
     const [userDetails, setUserDetails] = useState({
         name: '',
@@ -16,43 +16,43 @@ function AnimeRecommendationApp({ onLogoClick }) {
         mood: ''
     });
 
-    const [step, setStep] = useState(1); // 1: Add animes, 2: Add details, 3: Results
+    const [step, setStep] = useState(1); // 1: Add TV shows, 2: Add details, 3: Results
     const [isLoading, setIsLoading] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
 
-    // Handle adding a new anime
-    const handleAddAnime = () => {
-        if (!newAnimeTitle.trim()) {
+    // Handle adding a new TV show
+    const handleAddTv = () => {
+        if (!newTvTitle.trim()) {
             setIsInputError(true);
             return;
         }
 
-        if (animeTitles.length >= 5) {
-            setMaxAnimesReached(true);
+        if (tvTitles.length >= 5) {
+            setMaxTvsReached(true);
             return;
         }
 
-        setAnimeTitles([...animeTitles, newAnimeTitle.trim()]);
-        setNewAnimeTitle('');
+        setTvTitles([...tvTitles, newTvTitle.trim()]);
+        setNewTvTitle('');
         setIsInputError(false);
 
-        if (animeTitles.length === 4) {
-            setMaxAnimesReached(true);
+        if (tvTitles.length === 4) {
+            setMaxTvsReached(true);
         }
     };
 
-    // Handle removing an anime
-    const handleRemoveAnime = (index) => {
-        const updatedAnimes = [...animeTitles];
-        updatedAnimes.splice(index, 1);
-        setAnimeTitles(updatedAnimes);
-        setMaxAnimesReached(false);
+    // Handle removing a TV show
+    const handleRemoveTv = (index) => {
+        const updatedTvs = [...tvTitles];
+        updatedTvs.splice(index, 1);
+        setTvTitles(updatedTvs);
+        setMaxTvsReached(false);
     };
 
     // Handle input key press (Enter)
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            handleAddAnime();
+            handleAddTv();
         }
     };
 
@@ -64,7 +64,7 @@ function AnimeRecommendationApp({ onLogoClick }) {
 
     // Handle continuing to details step
     const handleContinueToDetails = () => {
-        if (animeTitles.length > 0) {
+        if (tvTitles.length > 0) {
             setStep(2);
         } else {
             setIsInputError(true);
@@ -78,11 +78,11 @@ function AnimeRecommendationApp({ onLogoClick }) {
         // Simulate API call with timeout
         setTimeout(() => {
             const mockResults = [
-                { id: 1, title: "Attack on Titan", studio: "MAPPA", year: 2013, episodes: 87, rating: 4.8, image: "/api/placeholder/300/450" },
-                { id: 2, title: "Fullmetal Alchemist: Brotherhood", studio: "Bones", year: 2009, episodes: 64, rating: 4.9, image: "/api/placeholder/300/450" },
-                { id: 3, title: "Demon Slayer", studio: "ufotable", year: 2019, episodes: 44, rating: 4.7, image: "/api/placeholder/300/450" },
-                { id: 4, title: "One Piece", studio: "Toei Animation", year: 1999, episodes: 1000, rating: 4.8, image: "/api/placeholder/300/450" },
-                { id: 5, title: "Violet Evergarden", studio: "Kyoto Animation", year: 2018, episodes: 13, rating: 4.6, image: "/api/placeholder/300/450" }
+                { id: 1, title: "Breaking Bad", network: "AMC", year: 2008, seasons: 5, rating: 4.9, image: "/api/placeholder/300/450" },
+                { id: 2, title: "Stranger Things", network: "Netflix", year: 2016, seasons: 4, rating: 4.7, image: "/api/placeholder/300/450" },
+                { id: 3, title: "Game of Thrones", network: "HBO", year: 2011, seasons: 8, rating: 4.6, image: "/api/placeholder/300/450" },
+                { id: 4, title: "The Office", network: "NBC", year: 2005, seasons: 9, rating: 4.8, image: "/api/placeholder/300/450" },
+                { id: 5, title: "Friends", network: "NBC", year: 1994, seasons: 10, rating: 4.8, image: "/api/placeholder/300/450" }
             ];
 
             setRecommendations(mockResults);
@@ -93,8 +93,8 @@ function AnimeRecommendationApp({ onLogoClick }) {
 
     // Reset to start over
     const handleStartOver = () => {
-        setAnimeTitles([]);
-        setNewAnimeTitle('');
+        setTvTitles([]);
+        setNewTvTitle('');
         setUserDetails({
             name: '',
             genre: '',
@@ -102,7 +102,7 @@ function AnimeRecommendationApp({ onLogoClick }) {
             mood: ''
         });
         setIsInputError(false);
-        setMaxAnimesReached(false);
+        setMaxTvsReached(false);
         setStep(1);
         setRecommendations([]);
     };
@@ -127,33 +127,33 @@ function AnimeRecommendationApp({ onLogoClick }) {
                     </div>
                 </div>
 
-                {/* Step 1: Add Animes */}
+                {/* Step 1: Add TV Shows */}
                 {step === 1 && (
                     <section className="section">
                         <div className="container">
                             <div className="section-header">
-                                <h2 className="section-title">Add Your Favorite Anime</h2>
-                                <p className="section-subtitle">Enter up to 5 anime series that you enjoy to receive personalized recommendations.</p>
+                                <h2 className="section-title">Add Your Favorite TV Shows</h2>
+                                <p className="section-subtitle">Enter up to 5 TV shows that you enjoy to receive personalized recommendations.</p>
                             </div>
 
                             <div className="form-container">
-                                {/* Anime input */}
+                                {/* TV show input */}
                                 <div className="input-group">
                                     <input
                                         type="text"
-                                        value={newAnimeTitle}
+                                        value={newTvTitle}
                                         onChange={(e) => {
-                                            setNewAnimeTitle(e.target.value);
+                                            setNewTvTitle(e.target.value);
                                             setIsInputError(false);
                                         }}
                                         onKeyPress={handleKeyPress}
-                                        placeholder="Enter anime title"
+                                        placeholder="Enter TV show title"
                                         className={`text-input ${isInputError ? 'error' : ''}`}
-                                        disabled={maxAnimesReached}
+                                        disabled={maxTvsReached}
                                     />
                                     <button
-                                        onClick={handleAddAnime}
-                                        disabled={maxAnimesReached}
+                                        onClick={handleAddTv}
+                                        disabled={maxTvsReached}
                                         className="add-button"
                                     >
                                         <Plus size={20} />
@@ -163,30 +163,30 @@ function AnimeRecommendationApp({ onLogoClick }) {
                                 {isInputError && (
                                     <div className="error-message">
                                         <AlertCircle size={16} className="error-icon" />
-                                        <span>Please enter an anime title</span>
+                                        <span>Please enter a TV show title</span>
                                     </div>
                                 )}
 
-                                {maxAnimesReached && animeTitles.length >= 5 && (
+                                {maxTvsReached && tvTitles.length >= 5 && (
                                     <div className="warning-message">
                                         <AlertCircle size={20} />
-                                        <p>Maximum of 5 anime titles reached. Remove one to add more.</p>
+                                        <p>Maximum of 5 TV shows reached. Remove one to add more.</p>
                                     </div>
                                 )}
 
-                                {/* List of added animes */}
-                                <div className="anime-list-container">
-                                    <h3 className="anime-list-title">Your Anime ({animeTitles.length}/5)</h3>
+                                {/* List of added TV shows */}
+                                <div className="tv-list-container">
+                                    <h3 className="tv-list-title">Your TV Shows ({tvTitles.length}/5)</h3>
 
-                                    {animeTitles.length === 0 ? (
-                                        <p className="empty-message">No anime added yet</p>
+                                    {tvTitles.length === 0 ? (
+                                        <p className="empty-message">No TV shows added yet</p>
                                     ) : (
-                                        <ul className="anime-list">
-                                            {animeTitles.map((anime, index) => (
-                                                <li key={index} className="anime-list-item">
-                                                    <span>{anime}</span>
+                                        <ul className="tv-list">
+                                            {tvTitles.map((tv, index) => (
+                                                <li key={index} className="tv-list-item">
+                                                    <span>{tv}</span>
                                                     <button
-                                                        onClick={() => handleRemoveAnime(index)}
+                                                        onClick={() => handleRemoveTv(index)}
                                                         className="remove-button"
                                                     >
                                                         <X size={18} />
@@ -217,7 +217,7 @@ function AnimeRecommendationApp({ onLogoClick }) {
                         <div className="container">
                             <div className="section-header">
                                 <h2 className="section-title">Add Some Details</h2>
-                                <p className="section-subtitle">Help us understand your anime preferences better (optional)</p>
+                                <p className="section-subtitle">Help us understand your preferences better (optional)</p>
                             </div>
 
                             <div className="form-container details-form">
@@ -243,19 +243,14 @@ function AnimeRecommendationApp({ onLogoClick }) {
                                             className="select-input"
                                         >
                                             <option value="">Select a genre</option>
-                                            <option value="action">Action</option>
-                                            <option value="adventure">Adventure</option>
-                                            <option value="comedy">Comedy</option>
                                             <option value="drama">Drama</option>
+                                            <option value="comedy">Comedy</option>
+                                            <option value="thriller">Thriller</option>
+                                            <option value="sci-fi">Sci-Fi</option>
                                             <option value="fantasy">Fantasy</option>
-                                            <option value="horror">Horror</option>
-                                            <option value="isekai">Isekai</option>
-                                            <option value="mecha">Mecha</option>
-                                            <option value="romance">Romance</option>
-                                            <option value="scifi">Sci-Fi</option>
-                                            <option value="slice">Slice of Life</option>
-                                            <option value="sports">Sports</option>
-                                            <option value="supernatural">Supernatural</option>
+                                            <option value="crime">Crime</option>
+                                            <option value="action">Action</option>
+                                            <option value="animated">Animated</option>
                                         </select>
                                     </div>
 
@@ -268,28 +263,29 @@ function AnimeRecommendationApp({ onLogoClick }) {
                                             className="select-input"
                                         >
                                             <option value="">Select an era</option>
-                                            <option value="classic">Classic (pre-2000s)</option>
+                                            <option value="classic">Classic (pre-1980s)</option>
+                                            <option value="80s-90s">80s-90s</option>
                                             <option value="2000s">2000s</option>
-                                            <option value="2010s">2010s</option>
-                                            <option value="recent">Recent (2020+)</option>
+                                            <option value="modern">Modern (2010s+)</option>
                                             <option value="any">Any era</option>
                                         </select>
                                     </div>
 
                                     <div className="form-field">
-                                        <label className="form-label">Anime Length Preference</label>
+                                        <label className="form-label">Current Mood</label>
                                         <select
                                             name="mood"
                                             value={userDetails.mood}
                                             onChange={handleDetailChange}
                                             className="select-input"
                                         >
-                                            <option value="">How long do you prefer?</option>
-                                            <option value="short">Short (1-12 episodes)</option>
-                                            <option value="medium">Medium (13-24 episodes)</option>
-                                            <option value="long">Long (25-50 episodes)</option>
-                                            <option value="very-long">Very long (50+ episodes)</option>
-                                            <option value="any">Any length</option>
+                                            <option value="">How are you feeling?</option>
+                                            <option value="happy">Happy</option>
+                                            <option value="relaxed">Relaxed</option>
+                                            <option value="thoughtful">Thoughtful</option>
+                                            <option value="excited">Excited</option>
+                                            <option value="nostalgic">Nostalgic</option>
+                                            <option value="adventurous">Adventurous</option>
                                         </select>
                                     </div>
                                 </div>
@@ -305,7 +301,7 @@ function AnimeRecommendationApp({ onLogoClick }) {
                                         onClick={handleGetRecommendations}
                                         className="search-button"
                                     >
-                                        <span>Get Your Anime</span>
+                                        <span>Get Your TV Shows</span>
                                         <Search size={18} />
                                     </button>
                                 </div>
@@ -325,27 +321,27 @@ function AnimeRecommendationApp({ onLogoClick }) {
                             ) : (
                                 <>
                                     <div className="section-header">
-                                        <h2 className="section-title">Your Personalized Anime Recommendations</h2>
-                                        <p className="section-subtitle">Based on your choices, we think you'll love these anime series</p>
+                                        <h2 className="section-title">Your Personalized TV Recommendations</h2>
+                                        <p className="section-subtitle">Based on your TV show choices, we think you'll love these</p>
                                     </div>
 
                                     <div className="recommendation-grid">
-                                        {recommendations.map((anime) => (
-                                            <div key={anime.id} className="anime-card">
+                                        {recommendations.map((tv) => (
+                                            <div key={tv.id} className="tv-card">
                                                 <img
-                                                    src={anime.image}
-                                                    alt={anime.title}
-                                                    className="anime-poster"
+                                                    src={tv.image}
+                                                    alt={tv.title}
+                                                    className="tv-poster"
                                                 />
-                                                <div className="anime-info">
-                                                    <div className="anime-header">
-                                                        <h4 className="anime-title">{anime.title}</h4>
-                                                        <span className="anime-rating">
-                                                            {anime.rating}
+                                                <div className="tv-info">
+                                                    <div className="tv-header">
+                                                        <h4 className="tv-title">{tv.title}</h4>
+                                                        <span className="tv-rating">
+                                                            {tv.rating}
                                                         </span>
                                                     </div>
-                                                    <p className="anime-studio">{anime.studio}</p>
-                                                    <p className="anime-details">{anime.year} • {anime.episodes} episodes</p>
+                                                    <p className="tv-network">{tv.network}</p>
+                                                    <p className="tv-details">{tv.year} • {tv.seasons} seasons</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -384,4 +380,4 @@ function AnimeRecommendationApp({ onLogoClick }) {
     );
 }
 
-export default AnimeRecommendationApp; 
+export default TVRecommendationApp; 

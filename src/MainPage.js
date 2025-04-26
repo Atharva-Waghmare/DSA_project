@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import MovieRecommendationApp from './MovieRecommendationApp';
 import BookRecommendationApp from './BookRecommendationApp';
 import AnimeRecommendationApp from './AnimeRecommendationApp';
+import TVRecommendationApp from './TVRecommendationApp';
 import './MainPage.css';
 
 const MainPage = () => {
@@ -10,10 +11,16 @@ const MainPage = () => {
 
     const sections = [
         {
-            title: 'Movies & TV Shows',
-            description: 'Discover and get recommendations for your next favorite movie or TV show',
+            title: 'Movies',
+            description: 'Discover and get recommendations for your next favorite movie',
             icon: '🎬',
             page: 'movies'
+        },
+        {
+            title: 'TV Shows',
+            description: 'Find your next binge-worthy TV show with personalized recommendations',
+            icon: '📺',
+            page: 'tv'
         },
         {
             title: 'Anime',
@@ -43,6 +50,14 @@ const MainPage = () => {
         return (
             <div className="app-container">
                 <MovieRecommendationApp onLogoClick={handleLogoClick} />
+            </div>
+        );
+    }
+
+    if (currentPage === 'tv') {
+        return (
+            <div className="app-container">
+                <TVRecommendationApp onLogoClick={handleLogoClick} />
             </div>
         );
     }
