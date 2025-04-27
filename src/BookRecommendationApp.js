@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { Plus, X, Search, AlertCircle, BookOpen } from 'lucide-react';
-import Navbar from './Navbar';
+import BookNavbar from './BookNavbar';
 import './BookRecommendationApp.css';
 
-function BookRecommendationApp({ onLogoClick }) {
+function BookRecommendationApp() {
     const [bookTitles, setBookTitles] = useState([]);
     const [newBookTitle, setNewBookTitle] = useState('');
     const [isInputError, setIsInputError] = useState(false);
     const [maxBooksReached, setMaxBooksReached] = useState(false);
 
     const [userDetails, setUserDetails] = useState({
-        name: '',
         genre: '',
         era: '',
         mood: ''
@@ -71,57 +70,59 @@ function BookRecommendationApp({ onLogoClick }) {
         }
     };
 
-    // Handle getting recommendations
-    const handleGetRecommendations = async () => {
+    // Mock function to get recommendations
+    const handleGetRecommendations = () => {
         setIsLoading(true);
 
-        try {
-            const response = await fetch('http://localhost:5000/recommend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        // Simulate API call with timeout
+        setTimeout(() => {
+            const mockResults = [
+                {
+                    id: 1,
+                    title: "The Great Gatsby",
+                    author: "F. Scott Fitzgerald",
+                    year: 1925,
+                    rating: 4.8,
+                    image: "https://images-na.ssl-images-amazon.com/images/I/71FTb9X6wsL.jpg"
                 },
-                body: JSON.stringify({
-                    type: 'books',
-                    favorites: bookTitles,
-                    preferences: {
-                        genre: userDetails.genre,
-                        mood: userDetails.mood,
-                        era: userDetails.era
-                    }
-                })
-            });
+                {
+                    id: 2,
+                    title: "To Kill a Mockingbird",
+                    author: "Harper Lee",
+                    year: 1960,
+                    rating: 4.9,
+                    image: "https://images-na.ssl-images-amazon.com/images/I/81f7o6uZjFL.jpg"
+                },
+                {
+                    id: 3,
+                    title: "1984",
+                    author: "George Orwell",
+                    year: 1949,
+                    rating: 4.7,
+                    image: "https://images-na.ssl-images-amazon.com/images/I/71kxa1-0mfL.jpg"
+                },
+                {
+                    id: 4,
+                    title: "Pride and Prejudice",
+                    author: "Jane Austen",
+                    year: 1813,
+                    rating: 4.9,
+                    image: "https://images-na.ssl-images-amazon.com/images/I/71Q1tPupKjL.jpg"
+                },
+                {
+                    id: 5,
+                    title: "The Catcher in the Rye",
+                    author: "J.D. Salinger",
+                    year: 1951,
+                    rating: 4.8,
+                    image: "https://images-na.ssl-images-amazon.com/images/I/91HPG31dTwL.jpg"
+                }
+            ];
 
-            if (!response.ok) {
-                throw new Error('Failed to get recommendations');
-            }
-
-            const data = await response.json();
-            setRecommendations(data);
-            setStep(3);
-        } catch (error) {
-            console.error('Error getting recommendations:', error);
-            // You might want to show an error message to the user here
-        } finally {
+            setRecommendations(mockResults);
             setIsLoading(false);
-        }
-    };
-
-    // Add search functionality
-    const handleSearch = async (query) => {
-        if (!query) return;
-
-        try {
-            const response = await fetch(`http://localhost:5000/search?type=books&query=${encodeURIComponent(query)}`);
-            if (!response.ok) {
-                throw new Error('Failed to search');
-            }
-            const data = await response.json();
-            // Handle the search results as needed
-            console.log('Search results:', data);
-        } catch (error) {
-            console.error('Error searching:', error);
-        }
+            setStep(3);
+        }, 1500);
     };
 
     // Reset to start over
@@ -129,7 +130,6 @@ function BookRecommendationApp({ onLogoClick }) {
         setBookTitles([]);
         setNewBookTitle('');
         setUserDetails({
-            name: '',
             genre: '',
             era: '',
             mood: ''
@@ -142,7 +142,7 @@ function BookRecommendationApp({ onLogoClick }) {
 
     return (
         <div className="app-container">
-            <Navbar onLogoClick={onLogoClick} />
+            <BookNavbar />
             {/* Main Content */}
             <main className="main-content">
                 {/* Step Indicator */}
@@ -256,18 +256,6 @@ function BookRecommendationApp({ onLogoClick }) {
                             <div className="form-container details-form">
                                 <div className="form-fields">
                                     <div className="form-field">
-                                        <label className="form-label">Your Name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={userDetails.name}
-                                            onChange={handleDetailChange}
-                                            className="text-input"
-                                            placeholder="Enter your name"
-                                        />
-                                    </div>
-
-                                    <div className="form-field">
                                         <label className="form-label">Favorite Genre</label>
                                         <select
                                             name="genre"
@@ -354,8 +342,8 @@ function BookRecommendationApp({ onLogoClick }) {
                             ) : (
                                 <>
                                     <div className="section-header">
-                                        <h2 className="section-title">Your Personalized Book Recommendations</h2>
-                                        <p className="section-subtitle">Based on your reading choices, we think you'll love these</p>
+                                        <h2 className="section-title">Your Personalized Recommendations</h2>
+                                        <p className="section-subtitle">Based on your book choices, we think you'll love these</p>
                                     </div>
 
                                     <div className="recommendation-grid">
@@ -401,10 +389,10 @@ function BookRecommendationApp({ onLogoClick }) {
                     <div className="footer-content">
                         <div className="footer-logo">
                             <BookOpen size={20} className="logo-icon" />
-                            <span className="logo-text">Entertainment Hub</span>
+                            <span className="logo-text">BookMatchr</span>
                         </div>
                         <div className="copyright">
-                            © 2025 Entertainment Hub. All rights reserved.
+                            © 2025 BookMatchr. All rights reserved.
                         </div>
                     </div>
                 </div>
