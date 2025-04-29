@@ -12,7 +12,7 @@ function BookNavbar() {
                         <h1 className="logo-text">BookMatchr</h1>
                     </div>
                     <div className="nav-menu">
-                        <a href="#" className="nav-link">Home</a>
+                        <a href="/" className="nav-link">Home</a>
                         <a href="#" className="nav-link">How It Works</a>
                         <a href="#" className="nav-link">Top Picks</a>
                         <a href="#" className="nav-link">About</a>
