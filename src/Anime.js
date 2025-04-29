@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, X, Search, AlertCircle, Film } from "lucide-react";
 import BookNavbar from "./BookNavbar";
-import "./BookRecommendationApp.css"; // Using the same CSS for consistency
+import "./Anime.css"; // Using anime-specific CSS file
 
 function Anime() {
   const [animeTitles, setAnimeTitles] = useState([]);
@@ -101,7 +101,7 @@ function Anime() {
       }
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setRecommendations(data.recommendations);
     } catch (error) {
       console.error("Error getting anime recommendations:", error);
@@ -406,7 +406,10 @@ function Anime() {
                     {recommendations.map((anime) => (
                       <div key={anime.id} className="book-card">
                         <img
-                          src={anime.image}
+                          src={anime.image.replace(
+                            "myanimelist.cdn-dena.com",
+                            "cdn.myanimelist.net"
+                          )}
                           alt={anime.title}
                           className="book-cover"
                         />

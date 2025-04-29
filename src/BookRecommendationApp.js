@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, X, Search, AlertCircle, BookOpen } from "lucide-react";
 import BookNavbar from "./BookNavbar";
-import "./BookRecommendationApp.css";
+import "./BookRecommendation.css"; // Using book-specific CSS file
 
 function BookRecommendationApp() {
   const [bookTitles, setBookTitles] = useState([]);

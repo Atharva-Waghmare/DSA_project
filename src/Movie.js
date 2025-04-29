@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Plus, X, Search, AlertCircle, Tv } from "lucide-react";
+import { Plus, X, Search, AlertCircle, Tv, Film } from "lucide-react";
 import BookNavbar from "./BookNavbar";
-import "./BookRecommendationApp.css"; // Using the same CSS for consistency
+import "./Movie.css"; // Using a separate CSS file for this page
 
 function Movie() {
   const [movieTitles, setMovieTitles] = useState([]);
@@ -101,7 +101,7 @@ function Movie() {
       }
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setRecommendations(data.recommendations);
     } catch (error) {
       console.error("Error getting movie recommendations:", error);
@@ -114,8 +114,6 @@ function Movie() {
           year: 1994,
           rating: 9.3,
           genre: "Drama",
-          image:
-            "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
         },
         {
           id: "tt0068646",
@@ -124,8 +122,6 @@ function Movie() {
           year: 1972,
           rating: 9.2,
           genre: "Crime,Drama",
-          image:
-            "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
         },
         {
           id: "tt0468569",
@@ -134,8 +130,6 @@ function Movie() {
           year: 2008,
           rating: 9.0,
           genre: "Action,Crime,Drama",
-          image:
-            "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg",
         },
         {
           id: "tt0167260",
@@ -144,8 +138,6 @@ function Movie() {
           year: 2003,
           rating: 8.9,
           genre: "Action,Adventure,Drama",
-          image:
-            "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
         },
         {
           id: "tt0120737",
@@ -154,8 +146,6 @@ function Movie() {
           year: 2001,
           rating: 8.8,
           genre: "Action,Adventure,Drama",
-          image:
-            "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg",
         },
       ];
 
@@ -181,11 +171,35 @@ function Movie() {
     setRecommendations([]);
   };
 
+  // Get icon based on media type
+  const getMediaIcon = (type) => {
+    if (type === "TV Series" || type === "tvSeries") {
+      return <Tv size={16} className="media-icon" />;
+    }
+    return <Film size={16} className="media-icon" />;
+  };
+
+  // Get genre badges
+  const getGenreBadges = (genreString) => {
+    if (!genreString) return null;
+
+    const genres = genreString.split(",");
+    return (
+      <div className="genre-badges">
+        {genres.map((genre, index) => (
+          <span key={index} className="genre-badge">
+            {genre.trim()}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <div className="app-container">
+    <div className="movie-app-container">
       <BookNavbar />
       {/* Main Content */}
-      <main className="main-content">
+      <main className="movie-main-content">
         {/* Step Indicator */}
         <div className="container">
           <div className="steps-container">
@@ -209,7 +223,7 @@ function Movie() {
 
         {/* Step 1: Add Movies */}
         {step === 1 && (
-          <section className="section">
+          <section className="movie-section">
             <div className="container">
               <div className="section-header">
                 <h2 className="section-title">
@@ -262,8 +276,8 @@ function Movie() {
                 )}
 
                 {/* List of added movies */}
-                <div className="book-list-container">
-                  <h3 className="book-list-title">
+                <div className="movie-list-container">
+                  <h3 className="movie-list-title">
                     Your Movies & Shows ({movieTitles.length}/5)
                   </h3>
 
@@ -272,9 +286,10 @@ function Movie() {
                       No movies or shows added yet
                     </p>
                   ) : (
-                    <ul className="book-list">
+                    <ul className="movie-list">
                       {movieTitles.map((movie, index) => (
-                        <li key={index} className="book-list-item">
+                        <li key={index} className="movie-list-item">
+                          <Film size={16} className="movie-list-icon" />
                           <span>{movie}</span>
                           <button
                             onClick={() => handleRemoveMovie(index)}
@@ -304,7 +319,7 @@ function Movie() {
 
         {/* Step 2: Add Details */}
         {step === 2 && (
-          <section className="section">
+          <section className="movie-section">
             <div className="container">
               <div className="section-header">
                 <h2 className="section-title">Add Some Details</h2>
@@ -400,7 +415,7 @@ function Movie() {
 
         {/* Step 3: Results */}
         {step === 3 && (
-          <section className="section">
+          <section className="movie-section">
             <div className="container">
               {isLoading ? (
                 <div className="loading-container">
@@ -417,33 +432,26 @@ function Movie() {
                     </p>
                   </div>
 
-                  <div className="recommendation-grid">
+                  <div className="movie-recommendation-grid">
                     {recommendations.map((movie) => (
-                      <div key={movie.id} className="book-card">
-                        <img
-                          src={movie.image}
-                          alt={movie.title}
-                          className="book-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src =
-                              "https://via.placeholder.com/150x225?text=No+Poster";
-                          }}
-                        />
-                        <div className="book-info">
-                          <div className="book-header">
-                            <h4 className="book-title">{movie.title}</h4>
-                            <span className="book-rating">
-                              {movie.rating.toFixed(1)}
-                            </span>
+                      <div key={movie.id} className="movie-card">
+                        <div className="movie-card-content">
+                          <div className="movie-info">
+                            <div className="movie-header">
+                              <h4 className="movie-title">{movie.title}</h4>
+                              <span className="movie-rating">
+                                {movie.rating.toFixed(1)}
+                              </span>
+                            </div>
+                            <div className="movie-meta">
+                              <div className="media-type">
+                                {getMediaIcon(movie.type)}
+                                <span>{movie.type}</span>
+                              </div>
+                              <div className="movie-year">{movie.year}</div>
+                            </div>
+                            {movie.genre && getGenreBadges(movie.genre)}
                           </div>
-                          <p className="book-type">
-                            {movie.type === "tvSeries" ? "TV Series" : "Movie"}
-                          </p>
-                          <p className="book-year">{movie.year}</p>
-                          {movie.genre && (
-                            <p className="book-genre">{movie.genre}</p>
-                          )}
                         </div>
                       </div>
                     ))}
@@ -465,7 +473,7 @@ function Movie() {
       </main>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="movie-footer">
         <div className="container">
           <div className="footer-content">
             <div className="footer-logo">
